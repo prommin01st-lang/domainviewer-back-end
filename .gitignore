@@ -1,0 +1,26 @@
+# .NET build outputs
+bin/
+obj/
+publish-ubuntu/
+publish-ubuntu.zip
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Test results
+TestResults/
+coverage/
+
+# NuGet
+*.nupkg

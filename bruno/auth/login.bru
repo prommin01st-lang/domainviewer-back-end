@@ -1,0 +1,40 @@
+meta {
+  name: Login
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "{{userEmail}}",
+    "password": "password19231923"
+  }
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setEnvVar("token", res.body.data.accessToken);
+    bru.setEnvVar("refreshToken", res.body.data.refreshToken);
+    bru.setEnvVar("userId", res.body.data.user.id);
+    bru.setEnvVar("userEmail", res.body.data.user.email);
+    bru.setEnvVar("userName", res.body.data.user.name);
+  }
+}
+
+tests {
+  test("should return 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("should have success true", function() {
+    expect(res.body.success).to.equal(true);
+  });
+  test("should return accessToken", function() {
+    expect(res.body.data.accessToken).to.exist;
+  });
+}

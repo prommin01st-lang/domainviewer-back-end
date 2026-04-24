@@ -1,0 +1,33 @@
+meta {
+  name: Update Alert Settings
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/api/alertsettings
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "alertMonths": 1,
+    "alertWeeks": 1,
+    "alertDays": 3,
+    "isEnabled": true
+  }
+}
+
+tests {
+  test("should return 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("should have success true", function() {
+    expect(res.body.success).to.equal(true);
+  });
+}

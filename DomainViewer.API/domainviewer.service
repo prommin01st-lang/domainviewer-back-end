@@ -1,0 +1,17 @@
+[Unit]
+Description=DomainViewer API
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/domainviewer
+ExecStart=/opt/domainviewer/DomainViewer.API
+Restart=always
+RestartSec=10
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://0.0.0.0:5000
+
+[Install]
+WantedBy=multi-user.target

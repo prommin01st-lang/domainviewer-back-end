@@ -1,0 +1,44 @@
+meta {
+  name: Create User (Owner Only)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "email": "employee-{{$timestamp}}@company.com",
+    "name": "New Employee",
+    "password": "password123",
+    "role": 1
+  }
+}
+
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("createdUserId", res.body.data.id);
+    bru.setEnvVar("createdUserEmail", res.body.data.email);
+  }
+}
+
+tests {
+  test("should return 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("should have success true", function() {
+    expect(res.body.success).to.equal(true);
+  });
+  test("should return user", function() {
+    expect(res.body.data.id).to.exist;
+    expect(res.body.data.email).to.exist;
+  });
+}

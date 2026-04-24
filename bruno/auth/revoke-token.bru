@@ -1,0 +1,30 @@
+meta {
+  name: Revoke Token
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/auth/revoke-token
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "refreshToken": "{{refreshToken}}"
+  }
+}
+
+tests {
+  test("should return 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("should have success true", function() {
+    expect(res.body.success).to.equal(true);
+  });
+}

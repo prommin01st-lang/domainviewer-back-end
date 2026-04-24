@@ -1,0 +1,36 @@
+meta {
+  name: Create Allowed Domain
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/allowedemaildomains
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "domain": "testcompany-{{$timestamp}}.com"
+  }
+}
+
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("allowedDomainId", res.body.data.id);
+  }
+}
+
+tests {
+  test("should return 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("should have success true", function() {
+    expect(res.body.success).to.equal(true);
+  });
+}

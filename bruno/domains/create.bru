@@ -1,0 +1,46 @@
+meta {
+  name: Create Domain
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/domains
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "name": "testdomain-{{$timestamp}}.com",
+    "description": "Test domain created by Bruno",
+    "registrationDate": "2024-01-01",
+    "expirationDate": "2027-12-31",
+    "registrant": "Test Company",
+    "registrar": "NameCheap"
+  }
+}
+
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("domainId", res.body.data.id);
+    bru.setEnvVar("domainName", res.body.data.name);
+  }
+}
+
+tests {
+  test("should return 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("should have success true", function() {
+    expect(res.body.success).to.equal(true);
+  });
+  test("should return domain with id", function() {
+    expect(res.body.data.id).to.exist;
+    expect(res.body.data.name).to.exist;
+  });
+}

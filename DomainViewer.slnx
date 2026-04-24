@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="DomainViewer.API/DomainViewer.API.csproj" />
+  <Project Path="DomainViewer.Core/DomainViewer.Core.csproj" />
+  <Project Path="DomainViewer.Infrastructure/DomainViewer.Infrastructure.csproj" />
+  <Project Path="DomainViewer.Tests/DomainViewer.Tests.csproj" />
+</Solution>
