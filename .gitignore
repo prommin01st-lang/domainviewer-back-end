@@ -24,3 +24,8 @@ coverage/
 
 # NuGet
 *.nupkg
+
+# Secrets - NEVER commit real configs
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
