@@ -34,14 +34,20 @@ public class AuthController : BaseApiController
             return ApiBadRequest(errors, ErrorCodes.ValidationFailed);
         }
 
-        if (await _context.Users.AnyAsync(u => u.Email == request.Email))
+        var expectedKey = _configuration["Registration:SecretKey"];
+        if (!string.IsNullOrWhiteSpace(expectedKey) && request.SecretKey != expectedKey)
+            return ApiBadRequest("Secret key ไม่ถูกต้อง", ErrorCodes.ValidationFailed);
+
+        var email = request.Email.Trim().ToLower();
+
+        if (await _context.Users.AnyAsync(u => u.Email == email))
             return ApiConflict("Email already exists", ErrorCodes.Duplicate);
 
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
         var user = new User
         {
-            Email = request.Email.Trim().ToLower(),
+            Email = email,
             Name = request.Name.Trim(),
             Provider = "credentials",
             ExternalId = Guid.NewGuid().ToString(),

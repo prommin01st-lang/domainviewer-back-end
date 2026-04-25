@@ -11,6 +11,7 @@ public record RegisterRequest(
     string Email,
     string Name,
     string Password,
+    string SecretKey,
     UserRole Role = UserRole.Employee
 );
 
