@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=simple
-User=www-data
-Group=www-data
+User=domainviewer
+Group=domainviewer
 WorkingDirectory=/opt/domainviewer
 ExecStart=/opt/domainviewer/DomainViewer.API
 Restart=always

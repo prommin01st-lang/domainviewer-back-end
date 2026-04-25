@@ -151,15 +151,46 @@ sudo journalctl -u domainviewer -f
 
 ---
 
-## 🔗 เปิด ngrok (สำหรับเชื่อมต่อ Frontend)
+## 🔗 เชื่อมต่อกับ Frontend (BFF Pattern)
+
+ตอนนี้ Frontend ใช้ **BFF (Backend for Frontend)** pattern — ไม่ได้เรียก Backend ตรงจาก Browser อีกต่อไป แต่เรียกผ่าน `/api/*` บน Next.js (Vercel) แล้ว Vercel Server จะ forward ไปหา Backend
+
+### วิธีเชื่อมต่อ
+
+**1. เปิด ngrok (ถ้ายังไม่มี Public IP)**
 
 ```bash
 ngrok http 5000
 ```
 
-เอา `Forwarding` URL (เช่น `https://xxx.ngrok-free.app`) ไปใส่ใน:
-- Frontend Environment: `NEXT_PUBLIC_API_URL=https://xxx.ngrok-free.app/api`
-- `appsettings.json` → `Cors:AllowedOrigins`
+**2. เอา ngrok URL ไปใส่ใน Vercel Environment Variables**
+
+| Variable | Value | Example |
+|----------|-------|---------|
+| `API_PROXY_URL` | URL ของ backend | `https://xxx.ngrok-free.app` |
+
+> ⚠️ อย่าใส่ `/api` ต่อท้าย ตัว BFF route จัดการให้เอง
+
+**3. อัปเดต `Cors:AllowedOrigins` ใน `appsettings.json`**
+
+```json
+{
+  "Cors": {
+    "AllowedOrigins": [
+      "http://localhost:3000",
+      "https://your-vercel-app.vercel.app"
+    ]
+  }
+}
+```
+
+**4. Restart backend**
+
+```bash
+sudo systemctl restart domainviewer
+```
+
+> 💡 **ถ้า server มี Public IP/Domain จริง**: ไม่ต้องใช้ ngrok เลย ตั้ง Nginx + SSL แล้วเอา `https://your-domain.com` ไปใส่ใน `API_PROXY_URL` แทน
 
 ---
 
